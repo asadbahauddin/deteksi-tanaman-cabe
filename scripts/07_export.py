@@ -57,6 +57,24 @@ def export_timm(run: str, opset: int, imgs: list[np.ndarray]) -> dict:
             "top1_agree": f"{int((ref.argmax(1) == got.argmax(1)).sum())}/{len(imgs)}"}
 
 
+def _strip_root(text: str) -> str:
+    for pre in (str(ROOT) + "\\", str(ROOT) + "/", ROOT.as_posix() + "/", str(ROOT), ROOT.as_posix()):
+        text = text.replace(pre, "")
+    return text
+
+
+def sanitize_export(dst: Path):
+    """Ultralytics menulis path absolut proyek ke metadata ekspor -> dibuang (bobot tidak berubah)."""
+    if dst.suffix == ".onnx":
+        m = onnx.load(str(dst))
+        for prop in m.metadata_props:
+            prop.value = _strip_root(prop.value)
+        onnx.save(m, str(dst))
+    else:
+        for f in list(dst.glob("*.yaml")) + list(dst.glob("*.py")):
+            f.write_text(_strip_root(f.read_text(encoding="utf-8")), encoding="utf-8")
+
+
 def export_yolo(run: str, imgs: list[np.ndarray]) -> list[dict]:
     from ultralytics import YOLO
 
@@ -71,6 +89,7 @@ def export_yolo(run: str, imgs: list[np.ndarray]) -> list[dict]:
         if dst.exists():
             shutil.rmtree(dst) if dst.is_dir() else dst.unlink()
         shutil.move(str(exported), dst)
+        sanitize_export(dst)
         got = load_classifier(dst.relative_to(ROOT).as_posix()).predict_proba(imgs)
         rows.append({"model": run, "format": "ONNX (Ultralytics)" if fmt == "onnx" else "NCNN (Ultralytics, fp32)",
                      "path": dst.relative_to(ROOT).as_posix(), "size_MB": dir_size_mb(dst),
@@ -98,6 +117,10 @@ def main():
         rows.append({"model": r, "format": "PyTorch checkpoint (referensi)", "path": pt.relative_to(ROOT).as_posix(),
                      "size_MB": dir_size_mb(pt), "max_abs_diff_logit": 0.0, "max_abs_diff_prob": 0.0, "top1_agree": "-"})
     df = pd.DataFrame(rows)
+    old = ROOT / "reports/export.csv"
+    if old.exists():  # gabungkan dengan ekspor model lain yang sudah ada
+        prev = pd.read_csv(old)
+        df = pd.concat([prev[~prev.model.isin(df.model)], df], ignore_index=True)
     df.to_csv(ROOT / "reports/export.csv", index=False)
     show = df.assign(size_MB=df.size_MB.map("{:.1f}".format),
                      max_abs_diff_logit=df.max_abs_diff_logit.map(lambda v: "-" if pd.isna(v) else f"{v:.1e}"),

@@ -36,7 +36,7 @@ def collect(inputs: list[str]) -> list[Path]:
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("inputs", nargs="+", help="path gambar dan/atau folder")
-    ap.add_argument("--model", default="mobilenetv3_large_100_augB")
+    ap.add_argument("--model", default="yolo11n_cls_augB")
     ap.add_argument("--device", default="cuda", choices=["cuda", "cpu"], help="untuk model PyTorch")
     ap.add_argument("--csv", type=Path, help="simpan hasil ke CSV")
     ap.add_argument("--warmup", type=int, default=3, help="inferensi pemanasan (tidak dihitung)")

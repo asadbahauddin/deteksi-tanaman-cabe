@@ -38,7 +38,7 @@ SHORT = {"Bacterial_Spot": "Bacterial Spot", "Cercospora_Leaf_Spot": "Cercospora
          "Healthy_Leaf": "Healthy", "Nutrition_Deficiency": "Nutrient Def.", "Powdery_Mildew": "Powdery Mildew"}
 ABBR = {"Bacterial_Spot": "Bact", "Cercospora_Leaf_Spot": "Cerc", "Curl_Virus": "Curl", "Healthy_Leaf": "Sehat",
         "Nutrition_Deficiency": "Nutr", "Powdery_Mildew": "Powd"}
-NAMA = {"mobilenetv3_large_100_augB": "MobileNetV3-B", "yolo11n_cls": "YOLO11n-cls"}
+NAMA = {"mobilenetv3_large_100_augB": "MobileNetV3-B", "yolo11n_cls": "YOLO11n-cls (lama)", "yolo11n_cls_augB": "YOLO11n-cls-B"}
 DETEKTOR_DEFAULT = ROOT / "runs/pretrained/yoloe-26n-seg-daun.pt"
 H, PANEL_W = 600, 420
 WIN = "Uji layar  |  R rekam  S screenshot  A ganti area  Q keluar"
@@ -219,7 +219,7 @@ def ringkasan(df, out, clips, shots, area, names, mode, excluded):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--models", nargs="+", default=["mobilenetv3_large_100_augB", "yolo11n_cls"])
+    ap.add_argument("--models", nargs="+", default=["yolo11n_cls_augB", "mobilenetv3_large_100_augB"])
     ap.add_argument("--mode", choices=["auto", "deteksi", "klasifikasi"], default="auto")
     ap.add_argument("--detektor", type=Path, default=DETEKTOR_DEFAULT)
     ap.add_argument("--det-conf", type=float, default=0.25)

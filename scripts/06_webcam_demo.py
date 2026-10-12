@@ -40,7 +40,7 @@ def draw(frame, classes, prob, fps, box):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--model", default="mobilenetv3_large_100_augB")
+    ap.add_argument("--model", default="yolo11n_cls_augB")
     ap.add_argument("--device", default="cuda", choices=["cuda", "cpu"])
     ap.add_argument("--camera", type=int, default=0)
     ap.add_argument("--max-frames", type=int, default=0, help="0 = sampai ditekan q")

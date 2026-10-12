@@ -328,7 +328,7 @@ class App:
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--models", nargs="+", default=["mobilenetv3_large_100_augB", "yolo11n_cls"])
+    ap.add_argument("--models", nargs="+", default=["yolo11n_cls_augB", "mobilenetv3_large_100_augB"])
     ap.add_argument("--mode", choices=["auto", "deteksi", "klasifikasi"], default="auto")
     ap.add_argument("--detektor", type=Path, default=L.DETEKTOR_DEFAULT)
     ap.add_argument("--det-conf", type=float, default=0.25)

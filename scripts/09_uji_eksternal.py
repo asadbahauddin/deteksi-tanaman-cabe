@@ -74,7 +74,7 @@ def grid(df, imgs, path, title, label_col=None, max_n=48):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--folder", type=Path, default=ROOT / "data/uji_internet")
-    ap.add_argument("--models", nargs="+", default=["mobilenetv3_large_100_augB", "yolo11n_cls"])
+    ap.add_argument("--models", nargs="+", default=["yolo11n_cls_augB", "mobilenetv3_large_100_augB"])
     ap.add_argument("--dup-threshold", type=int, default=4, help="jarak pHash <= ini = dianggap gambar dataset")
     ap.add_argument("--out", type=Path, default=None)
     args = ap.parse_args()

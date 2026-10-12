@@ -32,12 +32,13 @@ Seed 42 tetap untuk semua tahap. Config tersimpan di `configs/`.
 | 1. Audit | `python scripts/01_audit.py` (`--reuse` untuk memakai hash yang sudah ada, `--phash-threshold N`) | `reports/audit.md`, `samples_*.png`, `dup_*` |
 | 2. Split | `python scripts/02_split.py` (config: `configs/split.yaml`) | `splits/*.csv`, `data/split/` (symlink), `reports/split.md` |
 | 3a. YOLO | `python scripts/03a_train_yolo_cls.py` (config: `configs/yolo11n_cls.yaml`) | `runs/yolo11n_cls/` |
+| 3a. YOLO-B (**model utama**) | `python scripts/03a_train_yolo_cls.py --config configs/yolo11n_cls_augB.yaml` (augmentasi degradasi, `val_workers: 0` hemat RAM) | `runs/yolo11n_cls_augB/` (+ `export/best.onnx`, `export/best_ncnn_model`) |
 | 3b. timm | `python scripts/03b_train_timm.py --model mobilenetv3_large_100 --aug B` (config: `configs/timm.yaml`) | `runs/<model>_aug<A/B>/` |
 | 3. Semua | `bash scripts/run_stage3.sh` (hentikan dengan aman: buat file `runs/_logs/STOP`) | log di `runs/_logs/` |
 | 4. Evaluasi test | `python scripts/04_evaluate.py --runs <run> ...` (dikunci: hanya sekali, lihat `reports/eval/TEST_USED`) | `reports/eval/` |
 | 5. Inferensi | `python scripts/05_infer.py <gambar/folder> [--model ...] [--device cpu] [--csv out.csv]` | label, probabilitas, waktu |
 | 5. Webcam | `python scripts/06_webcam_demo.py [--model ...] [--camera 0]` (tekan `q` untuk keluar) | jendela real-time |
-| 5. Ekspor | `python scripts/07_export.py` | ONNX/NCNN di `runs/<run>/export/`, `reports/export.md` |
+| 5. Ekspor | `python scripts/07_export.py` (YOLO-B: `--timm-run --yolo-run yolo11n_cls_augB`) | ONNX/NCNN di `runs/<run>/export/`, `reports/export.md` |
 | 5. Benchmark | `python scripts/08_benchmark_cpu.py [--threads 4]` | `reports/benchmark_cpu.md` |
 | Uji gambar luar | Isi `data/uji_internet/<Kelas>/` (lihat `PETUNJUK.txt`), lalu `python scripts/09_uji_eksternal.py` | `reports/uji_internet/<waktu>/ringkasan.md`; gambar yang ternyata berasal dari dataset ditandai otomatis |
 | Siapkan detektor daun (sekali) | `python scripts/11_siapkan_detektor_daun.py` (unduh encoder teks ~254 MB; jalankan saat koneksi bagus) | `runs/pretrained/yoloe-26n-seg-daun.pt` (YOLOE-26 zero-shot, prompt "leaf") |
@@ -48,6 +49,10 @@ Seed 42 tetap untuk semua tahap. Config tersimpan di `configs/`.
 - nama run (`mobilenetv3_large_100_augB`, `yolo11n_cls`);
 - file ONNX timm (`runs/mobilenetv3_large_100_augB/export/mobilenetv3_large_100_augB.onnx`);
 - ekspor YOLO (`runs/yolo11n_cls/export/best.onnx`, `runs/yolo11n_cls/export/best_ncnn_model`).
+
+## Model utama
+
+**YOLO11n-cls-B** (`runs/yolo11n_cls_augB`): YOLO11n-cls + augmentasi degradasi. Di val: macro-F1 0,988, robust hingga resolusi 64 px (0,986; YOLO lama 0,892), Grad-CAM fokus pada daun. Kelemahan: foto mentah berlatar abu-abu 82% (n=78). Pembanding: MobileNetV3-Large-B. Detail: `reports/eval_val/summary.md`. Semua script inferensi/uji memakai YOLO-B sebagai default.
 
 ## Struktur
 
