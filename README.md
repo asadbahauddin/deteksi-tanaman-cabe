@@ -39,6 +39,8 @@ Seed 42 tetap untuk semua tahap. Config tersimpan di `configs/`.
 | 5. Webcam | `python scripts/06_webcam_demo.py [--model ...] [--camera 0]` (tekan `q` untuk keluar) | jendela real-time |
 | 5. Ekspor | `python scripts/07_export.py` | ONNX/NCNN di `runs/<run>/export/`, `reports/export.md` |
 | 5. Benchmark | `python scripts/08_benchmark_cpu.py [--threads 4]` | `reports/benchmark_cpu.md` |
+| Uji gambar luar | Isi `data/uji_internet/<Kelas>/` (lihat `PETUNJUK.txt`), lalu `python scripts/09_uji_eksternal.py` | `reports/uji_internet/<waktu>/ringkasan.md`; gambar yang ternyata berasal dari dataset ditandai otomatis |
+| Uji tangkapan layar | `python scripts/10_uji_layar.py` → drag area daun; **R** rekam, **S** screenshot, **A** ganti area, **Q** keluar | `data/uji_internet/rekaman_layar/<waktu>/` (video MP4 2 model berdampingan, CSV per frame, ringkasan) |
 
 `--model` pada script 05 dan 06 menerima:
 - nama run (`mobilenetv3_large_100_augB`, `yolo11n_cls`);
