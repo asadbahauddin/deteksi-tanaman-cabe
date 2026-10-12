@@ -1,0 +1,2 @@
+2026-10-09 16:49 runs=['yolo11n_cls', 'mobilenetv3_large_100_augA', 'mobilenetv3_large_100_augB', 'efficientnet_b0_augA', 'efficientnet_b0_augB'] force=''
+2026-10-09 16:57 GRADCAM-ONLY runs=['mobilenetv3_large_100_augA', 'mobilenetv3_large_100_augB', 'efficientnet_b0_augA', 'efficientnet_b0_augB'] (koreksi layer target CAM, dipilih di val; metrik tidak dihitung ulang)

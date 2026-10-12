@@ -1,0 +1,13 @@
+{
+  "source": "Mendeley Data tm3v4zmh7c v1, DOI 10.17632/tm3v4zmh7c.1, CC BY 4.0",
+  "description": "8,814 images 1000x1000, smartphone, real farm conditions, white backgrounds; Bangladesh; no augmentation applied (per description)",
+  "total": 8814,
+  "classes": {
+    "Bacterial_Spot": 1629,
+    "Cercospora_Leaf_Spot": 1898,
+    "Curl_Virus": 1590,
+    "Healthy_Leaf": 1647,
+    "Nutrition_Deficiency": 1207,
+    "Powdery_Mildew": 843
+  }
+}

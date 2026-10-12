@@ -1,0 +1,16 @@
+# Dataset (2,9 GB; unduh ulang dari Mendeley DOI 10.17632/tm3v4zmh7c.1, lalu jalankan 01_audit & 02_split)
+data/
+
+# Run arsip / gagal / uji, bobot pretrained unduhan, checkpoint non-terbaik
+runs/_*/
+runs/pretrained/
+runs/**/last.pt
+runs/**/weights/last.pt
+
+# Cache & sementara
+*.cache
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.vscode/
+.idea/

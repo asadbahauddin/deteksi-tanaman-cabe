@@ -1,0 +1,16 @@
+# Tahap 3a - Ultralytics YOLO11n-cls (augmentasi bawaan Ultralytics)
+model: runs/pretrained/yolo11n-cls.pt   # pretrained ImageNet-1k (unduhan resmi Ultralytics)
+data: data/split             # train/ val/ (test/ tidak dipakai saat training)
+project: runs
+name: yolo11n_cls
+imgsz: 224
+epochs: 60
+patience: 12                 # early stopping pada val macro-F1 (lihat trainer custom)
+batch: 64
+workers: 2                   # RAM 7.7 GB + commit limit Windows (WinError 1455 pada 4 worker)
+seed: 42
+deterministic: false         # true memaksa algoritma deterministik (lambat); seed tetap dipakai
+amp: true
+optimizer: auto
+cache: false                 # RAM 7.7 GB
+plots: true

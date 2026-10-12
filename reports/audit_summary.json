@@ -1,0 +1,10 @@
+{
+  "total": 8817,
+  "bad": 0,
+  "exact_groups": 787,
+  "exact_redundant": 881,
+  "exact_cross": 0,
+  "threshold": 4,
+  "near_groups": 1286,
+  "near_cross_groups": 48
+}

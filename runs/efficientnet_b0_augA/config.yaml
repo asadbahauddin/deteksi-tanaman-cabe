@@ -1,0 +1,47 @@
+seed: 42
+splits_dir: splits
+runs_dir: runs
+img_size: 224
+epochs: 40
+patience: 10
+min_epochs: 25
+batch: 64
+workers: 2
+lr: 0.0005
+weight_decay: 0.05
+warmup_epochs: 2
+min_lr: 1.0e-06
+label_smoothing: 0.1
+drop_rate: 0.2
+amp: true
+aug:
+  rrc_scale:
+  - 0.5
+  - 1.0
+  hflip: 0.5
+  vflip: 0.5
+  rotate_deg: 15
+  color_jitter:
+    brightness: 0.2
+    contrast: 0.2
+    saturation: 0.15
+    hue: 0.02
+    p: 0.5
+model: efficientnet_b0
+aug_name: A
+pretrained_tag: efficientnet_b0.ra4_e3600_r224_in1k
+mean:
+- 0.5
+- 0.5
+- 0.5
+std:
+- 0.5
+- 0.5
+- 0.5
+classes:
+- Bacterial_Spot
+- Cercospora_Leaf_Spot
+- Curl_Virus
+- Healthy_Leaf
+- Nutrition_Deficiency
+- Powdery_Mildew

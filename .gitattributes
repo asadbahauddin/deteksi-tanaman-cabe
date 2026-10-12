@@ -1,0 +1,6 @@
+# Script shell & file model NCNN harus tetap LF (dipakai di Linux / Raspberry Pi)
+*.sh text eol=lf
+*.param -text
+*.bin binary
+*.onnx binary
+*.pt binary

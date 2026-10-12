@@ -1,0 +1,12 @@
+{
+  "model": "mobilenetv3_large_100",
+  "aug": "B",
+  "val_macro_f1": 0.9924760353031389,
+  "val_acc": 0.9915325994919559,
+  "best_epoch": 26,
+  "epochs_run": 36,
+  "train_min": 41.0,
+  "params_M": 4.21,
+  "pretrained": "mobilenetv3_large_100.ra4_e3600_r224_in1k",
+  "run_dir": "runs/mobilenetv3_large_100_augB"
+}

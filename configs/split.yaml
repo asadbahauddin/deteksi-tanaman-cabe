@@ -1,0 +1,36 @@
+# Tahap 2 — keputusan Checkpoint 1 (disetujui)
+seed: 42
+raw_dir: data/raw
+audit_files: reports/audit_files.csv
+audit_style: reports/audit_style.csv
+near_pairs: reports/near_dup_pairs.csv
+out_csv_dir: splits
+out_img_dir: data/split
+
+ratios: {train: 0.70, val: 0.15, test: 0.15}
+n_folds: 20                 # StratifiedGroupKFold: 14 fold train, 3 val, 3 test
+stratify_by: [class, style] # kelas x gaya/sub-sumber
+
+drop_exact_duplicates: true # sisakan 1 file per MD5 (relpath terurut pertama)
+group_phash_threshold: 4    # near-duplicate (invarian rotasi/flip) -> satu grup -> satu split
+
+drop_files:
+  extra_copy:               # salinan artefak unduhan (selisih +3 vs deskripsi)
+    - Powdery_Mildew/Powdery Mildew_187-2VytwV.png
+    - Powdery_Mildew/Powdery Mildew_188-f4NSlF.png
+    - Powdery_Mildew/Powdery Mildew_265-ttly2A.png
+  label_conflict:           # daun sama di dua kelas, terkonfirmasi visual
+    - Bacterial_Spot/Bacterial_Spot_668.jpg
+    - Bacterial_Spot/Bacterial_Spot_716.jpg
+    - Bacterial_Spot/Bacterial_Spot_740.jpg
+    - Bacterial_Spot/Bacterial_Spot_1204.jpg
+    - Bacterial_Spot/Bacterial_Spot_1508.jpg
+    - Bacterial_Spot/Bacterial_Spot_249.jpg
+    - Bacterial_Spot/Bacterial_Spot_1192.jpg
+    - Curl_Virus/Curl Virus_10.jpg
+    - Curl_Virus/Curl Virus_11.jpg
+    - Curl_Virus/Curl Virus_12.jpg
+    - Curl_Virus/Curl Virus_168.jpg
+    - Healthy_Leaf/Healthy_Leaf_775.jpg
+
+link_mode: auto             # auto = symlink jika bisa, jika tidak copy

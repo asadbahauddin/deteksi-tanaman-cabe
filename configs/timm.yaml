@@ -1,0 +1,42 @@
+# Tahap 3b - training timm (generik). Override via CLI: --model, --aug, --epochs, --batch, ...
+seed: 42
+splits_dir: splits
+runs_dir: runs
+img_size: 224
+pretrained_tags:             # bobot ImageNet-1k terbaru di timm 1.0.30, resolusi latih 224
+  mobilenetv3_large_100: mobilenetv3_large_100.ra4_e3600_r224_in1k
+  efficientnet_b0: efficientnet_b0.ra4_e3600_r224_in1k
+epochs: 40
+patience: 10                 # early stopping pada val macro-F1
+min_epochs: 25               # early stopping belum aktif sebelum ini (v1: patience 8 berhenti di ep 16, LR masih ~70%)
+batch: 64
+workers: 2                   # RAM 7.7 GB + commit limit Windows (WinError 1455 pada 4 worker)
+lr: 5.0e-4
+weight_decay: 0.05
+warmup_epochs: 2
+min_lr: 1.0e-6
+label_smoothing: 0.1
+drop_rate: 0.2
+amp: true
+
+aug:
+  A:                         # standar
+    rrc_scale: [0.5, 1.0]
+    hflip: 0.5
+    vflip: 0.5               # orientasi daun bebas
+    rotate_deg: 15
+    color_jitter: {brightness: 0.2, contrast: 0.2, saturation: 0.15, hue: 0.02, p: 0.5}
+  B:                         # standar + degradasi (simulasi crop daun 60-120 px dari kamera lapangan)
+    rrc_scale: [0.5, 1.0]
+    hflip: 0.5
+    vflip: 0.5
+    rotate_deg: 15
+    color_jitter: {brightness: 0.2, contrast: 0.2, saturation: 0.15, hue: 0.02, p: 0.5}
+    degrade:
+      downscale_px: [48, 128]  # downscale acak lalu upscale kembali ke img_size
+      downscale_p: 0.5
+      blur_p: 0.3              # Gaussian (3-5) atau motion (3-7)
+      jpeg_quality: [40, 90]
+      jpeg_p: 0.5
+      noise_std: [0.01, 0.04]  # fraksi dari 255
+      noise_p: 0.3

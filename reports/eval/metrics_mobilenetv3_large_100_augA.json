@@ -1,0 +1,95 @@
+{
+  "run": "mobilenetv3_large_100_augA",
+  "kind": "timm",
+  "n": 1245,
+  "accuracy": 0.9855421686746988,
+  "macro_f1": 0.9868423084826796,
+  "per_class": {
+    "Bacterial_Spot": {
+      "precision": 1.0,
+      "recall": 0.9565217391304348,
+      "f1-score": 0.9777777777777777,
+      "support": 207.0
+    },
+    "Cercospora_Leaf_Spot": {
+      "precision": 0.9813432835820896,
+      "recall": 0.9962121212121212,
+      "f1-score": 0.9887218045112782,
+      "support": 264.0
+    },
+    "Curl_Virus": {
+      "precision": 0.9747292418772563,
+      "recall": 0.9854014598540146,
+      "f1-score": 0.9800362976406534,
+      "support": 274.0
+    },
+    "Healthy_Leaf": {
+      "precision": 0.9817351598173516,
+      "recall": 0.9862385321100917,
+      "f1-score": 0.9839816933638444,
+      "support": 218.0
+    },
+    "Nutrition_Deficiency": {
+      "precision": 0.9874213836477987,
+      "recall": 0.9936708860759493,
+      "f1-score": 0.9905362776025236,
+      "support": 158.0
+    },
+    "Powdery_Mildew": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 124.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      198,
+      0,
+      6,
+      2,
+      1,
+      0
+    ],
+    [
+      0,
+      263,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      2,
+      270,
+      2,
+      0,
+      0
+    ],
+    [
+      0,
+      2,
+      0,
+      215,
+      1,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      157,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      124
+    ]
+  ]
+}

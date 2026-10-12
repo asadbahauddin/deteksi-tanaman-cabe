@@ -1,0 +1,95 @@
+{
+  "run": "yolo11n_cls",
+  "kind": "yolo",
+  "n": 1181,
+  "accuracy": 0.9889923793395428,
+  "macro_f1": 0.9897146549385422,
+  "per_class": {
+    "Bacterial_Spot": {
+      "precision": 1.0,
+      "recall": 0.9698492462311558,
+      "f1-score": 0.9846938775510204,
+      "support": 199.0
+    },
+    "Cercospora_Leaf_Spot": {
+      "precision": 0.9838709677419355,
+      "recall": 0.9878542510121457,
+      "f1-score": 0.9858585858585859,
+      "support": 247.0
+    },
+    "Curl_Virus": {
+      "precision": 0.9782608695652174,
+      "recall": 0.9911894273127754,
+      "f1-score": 0.9846827133479212,
+      "support": 227.0
+    },
+    "Healthy_Leaf": {
+      "precision": 0.990990990990991,
+      "recall": 1.0,
+      "f1-score": 0.995475113122172,
+      "support": 220.0
+    },
+    "Nutrition_Deficiency": {
+      "precision": 0.9875776397515528,
+      "recall": 0.9875776397515528,
+      "f1-score": 0.9875776397515528,
+      "support": 161.0
+    },
+    "Powdery_Mildew": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 127.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      193,
+      2,
+      3,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      244,
+      2,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      2,
+      225,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      220,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      2,
+      159,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      127
+    ]
+  ]
+}

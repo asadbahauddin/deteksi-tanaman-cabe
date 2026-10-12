@@ -1,0 +1,12 @@
+{
+  "model": "efficientnet_b0",
+  "aug": "B",
+  "val_macro_f1": 0.9886157557481466,
+  "val_acc": 0.9872988992379339,
+  "best_epoch": 12,
+  "epochs_run": 25,
+  "train_min": 38.6,
+  "params_M": 4.02,
+  "pretrained": "efficientnet_b0.ra4_e3600_r224_in1k",
+  "run_dir": "runs/efficientnet_b0_augB"
+}

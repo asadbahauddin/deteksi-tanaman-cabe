@@ -1,0 +1,16 @@
+amp: true
+batch: 64
+cache: false
+data: data\split
+deterministic: false
+epochs: 60
+exist_ok: true
+imgsz: 224
+model: yolo11n-cls.pt
+name: yolo11n_cls
+optimizer: auto
+patience: 12
+plots: true
+project: runs
+seed: 42
+workers: 2

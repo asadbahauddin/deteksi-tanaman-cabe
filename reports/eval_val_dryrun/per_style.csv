@@ -1,0 +1,7 @@
+run,style,n,salah,accuracy,kelas
+mobilenetv3_large_100_augB,JPG-640,64,3,0.953125,"Bact,Cerc,Curl,Healthy"
+mobilenetv3_large_100_augB,JPG-foto>=3000,78,6,0.9230769230769231,"Bact,Cerc,Curl,Healthy,Nutr"
+mobilenetv3_large_100_augB,JPG-lain,220,1,0.9954545454545455,"Bact,Cerc"
+mobilenetv3_large_100_augB,PNG-1000-RGBA,226,0,1.0,"Bact,Healthy,Nutr"
+mobilenetv3_large_100_augB,PNG-256-RGBA,521,0,1.0,"Curl,Healthy,Nutr,Powd"
+mobilenetv3_large_100_augB,PNG-lain-RGBA,72,0,1.0,"Bact,Healthy,Nutr,Powd"

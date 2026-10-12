@@ -1,0 +1,10 @@
+{
+  "model": "yolo11n-cls",
+  "aug": "ultralytics-default",
+  "val_macro_f1": 0.9904778451538933,
+  "val_acc": 0.9898391193903472,
+  "train_min": 72.6,
+  "best_epoch": 53,
+  "epochs_run": 60,
+  "run_dir": "runs/yolo11n_cls"
+}

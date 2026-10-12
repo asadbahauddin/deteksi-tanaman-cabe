@@ -1,0 +1,6 @@
+model,format,path,size_MB,max_abs_diff_logit,max_abs_diff_prob,top1_agree
+mobilenetv3_large_100_augB,"ONNX (opset 18, dynamo)",runs/mobilenetv3_large_100_augB/export/mobilenetv3_large_100_augB.onnx,16.31,1.043081283569336e-05,1.7285346984863281e-06,64/64
+yolo11n_cls,ONNX (Ultralytics),runs/yolo11n_cls/export/best.onnx,5.9,,1.519918441772461e-06,64/64
+yolo11n_cls,"NCNN (Ultralytics, fp32)",runs/yolo11n_cls/export/best_ncnn_model,5.89,,5.364418029785156e-07,64/64
+mobilenetv3_large_100_augB,PyTorch checkpoint (referensi),runs/mobilenetv3_large_100_augB/best.pt,16.24,0.0,0.0,-
+yolo11n_cls,PyTorch checkpoint (referensi),runs/yolo11n_cls/weights/best.pt,3.05,0.0,0.0,-
