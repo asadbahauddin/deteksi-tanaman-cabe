@@ -40,7 +40,8 @@ Seed 42 tetap untuk semua tahap. Config tersimpan di `configs/`.
 | 5. Ekspor | `python scripts/07_export.py` | ONNX/NCNN di `runs/<run>/export/`, `reports/export.md` |
 | 5. Benchmark | `python scripts/08_benchmark_cpu.py [--threads 4]` | `reports/benchmark_cpu.md` |
 | Uji gambar luar | Isi `data/uji_internet/<Kelas>/` (lihat `PETUNJUK.txt`), lalu `python scripts/09_uji_eksternal.py` | `reports/uji_internet/<waktu>/ringkasan.md`; gambar yang ternyata berasal dari dataset ditandai otomatis |
-| Uji tangkapan layar | `python scripts/10_uji_layar.py` → drag area daun; **R** rekam, **S** screenshot, **A** ganti area, **Q** keluar | `data/uji_internet/rekaman_layar/<waktu>/` (video MP4 2 model berdampingan, CSV per frame, ringkasan) |
+| Siapkan detektor daun (sekali) | `python scripts/11_siapkan_detektor_daun.py` (unduh encoder teks ~254 MB; jalankan saat koneksi bagus) | `runs/pretrained/yoloe-26n-seg-daun.pt` (YOLOE-26 zero-shot, prompt "leaf") |
+| Uji tangkapan layar | `python scripts/10_uji_layar.py` → drag area gambar; **R** rekam, **S** screenshot, **A** ganti area, **Q** keluar | `data/uji_internet/rekaman_layar/<waktu>/` (video MP4 2 model berdampingan, CSV, ringkasan). Mode **deteksi** (kotak per daun) aktif otomatis bila detektor sudah disiapkan; tanpa detektor = mode **klasifikasi** (hanya kotak tengah). Jendela program otomatis tidak ikut tertangkap. |
 
 `--model` pada script 05 dan 06 menerima:
 - nama run (`mobilenetv3_large_100_augB`, `yolo11n_cls`);
