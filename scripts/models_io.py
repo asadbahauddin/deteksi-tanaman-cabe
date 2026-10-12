@@ -34,6 +34,23 @@ class TimmClassifier:
     def predict_proba(self, imgs: list[np.ndarray]) -> np.ndarray:
         return self.model(self.to_tensor(imgs).to(self.device)).float().softmax(1).cpu().numpy()
 
+    def cam_target(self):
+        """(model -> logit, layer target Grad-CAM). Dipilih di val: EfficientNet=bn2, MobileNetV3=blocks[-1]."""
+        layer = self.model.bn2 if "efficientnet" in self.cfg["model"] else self.model.blocks[-1]
+        return self.model, layer
+
+
+class _YoloLogits(torch.nn.Module):
+    """Head Classify Ultralytics saat eval mengembalikan (probabilitas, logit); Grad-CAM butuh logit."""
+
+    def __init__(self, net):
+        super().__init__()
+        self.net = net
+
+    def forward(self, x):
+        y = self.net(x)
+        return y[1] if isinstance(y, (tuple, list)) else y
+
 
 class YoloClassifier:
     kind = "yolo"
@@ -47,6 +64,18 @@ class YoloClassifier:
         self.device = 0 if (device == "cuda" and torch.cuda.is_available()) else "cpu"
         self.size = 224
         self.name = run_dir.name
+
+    def to_tensor(self, imgs: list[np.ndarray]) -> torch.Tensor:
+        """Preprocessing YOLO-cls: RGB / 255 (tanpa normalisasi mean/std)."""
+        return torch.from_numpy(np.stack(imgs).astype(np.float32) / 255).permute(0, 3, 1, 2).contiguous()
+
+    def cam_target(self):
+        """(model -> logit, layer target Grad-CAM) = konvolusi 1x1 terakhir di head Classify (fitur spasial 7x7)."""
+        dev = "cuda" if (self.device == 0 and torch.cuda.is_available()) else "cpu"
+        net = self.model.model.float().eval().to(dev)
+        for p_ in net.parameters():
+            p_.requires_grad_(True)
+        return _YoloLogits(net), net.model[-1].conv
 
     def predict_proba(self, imgs: list[np.ndarray]) -> np.ndarray:
         # Ultralytics menerima BGR; input sudah 224x224 sehingga resize/crop internal = identitas

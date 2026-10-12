@@ -28,6 +28,27 @@ ul_data_utils._replace_image = lambda *a, **k: None
 
 
 class MacroF1Trainer(ClassificationTrainer):
+    DEGRADE = None  # dict augmentasi degradasi (configs: degrade) -> dataset train diganti DegradeClassificationDataset
+    VAL_WORKERS = None  # None = sama dengan workers (bawaan); 0 = validasi di proses utama (hemat RAM, worker persistent)
+
+    def get_dataloader(self, dataset_path, batch_size=16, rank=0, mode="train"):
+        if mode == "train" or self.VAL_WORKERS is None:
+            return super().get_dataloader(dataset_path, batch_size, rank, mode)
+        w = self.args.workers
+        self.args.workers = self.VAL_WORKERS
+        try:
+            return super().get_dataloader(dataset_path, batch_size, rank, mode)
+        finally:
+            self.args.workers = w
+
+    def build_dataset(self, img_path: str, mode: str = "train", batch=None):
+        if mode == "train" and self.DEGRADE:
+            from yolo_degrade import DegradeClassificationDataset
+
+            return DegradeClassificationDataset(img_path, self.args, augment=True, prefix="train",
+                                                names=self.data["names"], degrade_cfg=self.DEGRADE)
+        return super().build_dataset(img_path, mode, batch)
+
     def validate(self):
         metrics = self.validator(self)
         if metrics is None:
@@ -42,6 +63,37 @@ class MacroF1Trainer(ClassificationTrainer):
         return metrics, f1
 
 
+def _strip(o):
+    """Hapus prefix path absolut proyek dari string (rekursif) agar artefak aman dipublikasikan."""
+    if isinstance(o, str):
+        for pre in (str(ROOT) + "\\", str(ROOT) + "/", ROOT.as_posix() + "/", str(ROOT), ROOT.as_posix()):
+            o = o.replace(pre, "")
+        return o
+    if isinstance(o, dict):
+        return {k: _strip(v) for k, v in o.items()}
+    if isinstance(o, (list, tuple)):
+        return type(o)(_strip(v) for v in o)
+    return o
+
+
+def sanitize_run(run_dir: Path):
+    """Ultralytics menyimpan path absolut & info git di args.yaml dan checkpoint -> dibersihkan (bobot tidak berubah)."""
+    for f in run_dir.glob("*.yaml"):
+        f.write_text(_strip(f.read_text(encoding="utf-8")), encoding="utf-8")
+    for f in (run_dir / "weights").glob("*.pt"):
+        ck = torch.load(f, map_location="cpu", weights_only=False)
+        ck.pop("git", None)
+        for k in list(ck):
+            if k not in ("model", "ema", "optimizer"):
+                ck[k] = _strip(ck[k])
+        for key in ("model", "ema"):
+            m = ck.get(key)
+            for attr in ("args", "pt_path", "yaml", "yaml_file"):
+                if m is not None and hasattr(m, attr):
+                    setattr(m, attr, _strip(getattr(m, attr)))
+        torch.save(ck, f)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--config", type=Path, default=ROOT / "configs/yolo11n_cls.yaml")
@@ -54,6 +106,9 @@ def main():
     if args.name:
         cfg["name"] = args.name
     seed_everything(cfg["seed"])
+    MacroF1Trainer.DEGRADE = cfg.pop("degrade", None)
+    MacroF1Trainer.VAL_WORKERS = cfg.pop("val_workers", None)
+    aug_name = cfg.pop("aug_name", "ultralytics-default")
 
     run_dir = ROOT / cfg["project"] / cfg["name"]
     if run_dir.exists():
@@ -77,12 +132,15 @@ def main():
             y_pred.append(int(r.probs.top1))
     hist = pd.read_csv(run_dir / "results.csv")
     hist.columns = hist.columns.str.strip()
-    res = {"model": "yolo11n-cls", "aug": "ultralytics-default", "val_macro_f1": f1_score(y_true, y_pred, average="macro"),
+    res = {"model": "yolo11n-cls", "aug": aug_name, "val_macro_f1": f1_score(y_true, y_pred, average="macro"),
            "val_acc": accuracy_score(y_true, y_pred), "train_min": round(train_min, 1),
            "best_epoch": int(hist.loc[hist["metrics/macro_f1"].idxmax(), "epoch"]), "epochs_run": len(hist),
            "run_dir": run_dir.relative_to(ROOT).as_posix()}
     (run_dir / "val_metrics.json").write_text(json.dumps(res, indent=2), encoding="utf-8")
-    (run_dir / "run_config.yaml").write_text(yaml.safe_dump({**train_kw, "model": "yolo11n-cls.pt"}), encoding="utf-8")
+    (run_dir / "run_config.yaml").write_text(yaml.safe_dump({**train_kw, "model": "yolo11n-cls.pt",
+                                                             "degrade": MacroF1Trainer.DEGRADE,
+                                                             "val_workers": MacroF1Trainer.VAL_WORKERS}), encoding="utf-8")
+    sanitize_run(run_dir)
     if not cfg["name"].startswith("_"):  # run uji (nama diawali "_") tidak dicatat
         append_experiment(res, cfg_desc=f"imgsz {cfg['imgsz']}, batch {cfg['batch']}, epochs≤{cfg['epochs']}, "
                                     f"patience {cfg['patience']} (macro-F1), optimizer {cfg['optimizer']}, AMP")

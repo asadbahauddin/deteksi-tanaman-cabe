@@ -1,0 +1,10 @@
+{
+  "model": "yolo11n-cls",
+  "aug": "B (Ultralytics + degradasi)",
+  "val_macro_f1": 0.9889515928683542,
+  "val_acc": 0.9881456392887383,
+  "train_min": 53.9,
+  "best_epoch": 28,
+  "epochs_run": 40,
+  "run_dir": "runs/yolo11n_cls_augB"
+}

@@ -1,0 +1,31 @@
+amp: true
+batch: 64
+cache: false
+data: data\split
+degrade:
+  blur_p: 0.3
+  downscale_p: 0.5
+  downscale_px:
+  - 48
+  - 128
+  jpeg_p: 0.5
+  jpeg_quality:
+  - 40
+  - 90
+  noise_p: 0.3
+  noise_std:
+  - 0.01
+  - 0.04
+deterministic: false
+epochs: 60
+exist_ok: true
+imgsz: 224
+model: yolo11n-cls.pt
+name: yolo11n_cls_augB
+optimizer: auto
+patience: 12
+plots: true
+project: runs
+seed: 42
+val_workers: 0
+workers: 2

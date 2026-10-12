@@ -99,15 +99,15 @@ def error_grid(df, imgs, classes, path, title, per_pair=6, max_pairs=8):
     return [(classes[t], classes[p], int(pairs[(t, p)])) for t, p in pairs.index]
 
 
-def gradcam_section(clf: TimmClassifier, df, imgs, classes, out_dir, rng, n_each=2):
+def gradcam_section(clf, df, imgs, classes, out_dir, rng, n_each=2):
     from pytorch_grad_cam import GradCAM
     from pytorch_grad_cam.utils.image import show_cam_on_image
     from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
 
-    # layer target dipilih di VAL: EfficientNet -> bn2 (blocks[-1]/conv_head memberi 12-46% CAM kosong);
-    # MobileNetV3 -> blocks[-1] (conv_head-nya setelah global pool, tidak spasial)
-    layer = clf.model.bn2 if "efficientnet" in clf.cfg["model"] else clf.model.blocks[-1]
-    cam = GradCAM(model=clf.model, target_layers=[layer])
+    # layer target per model: lihat cam_target() di models_io.py (EfficientNet=bn2, MobileNetV3=blocks[-1],
+    # YOLO-cls=konvolusi terakhir head Classify)
+    net, layer = clf.cam_target()
+    cam = GradCAM(model=net, target_layers=[layer])
     # 1) grid kualitatif: per kelas n_each benar + n_each salah (target = kelas prediksi)
     rows = []
     for ci, c in enumerate(classes):
@@ -155,7 +155,7 @@ def run_gradcam_only(args, out):
     frames = []
     for r in args.runs:
         clf = load_classifier(r)
-        if not isinstance(clf, TimmClassifier):
+        if not hasattr(clf, "cam_target"):
             continue
         classes = clf.classes
         y = df.label.map({c: i for i, c in enumerate(classes)}).to_numpy()
@@ -171,7 +171,7 @@ def run_gradcam_only(args, out):
                                             cam_pojok_kiri_atas=("cam_mass_corner_tl", "mean")).reset_index()
     txt = md_table(cg, "{:.3f}")
     (out / "gradcam_summary.md").write_text(
-        "# Grad-CAM (layer: EfficientNet=bn2, MobileNetV3=blocks[-1])\n\n" + txt + "\n", encoding="utf-8")
+        "# Grad-CAM (layer: EfficientNet=bn2, MobileNetV3=blocks[-1], YOLO-cls=head conv)\n\n" + txt + "\n", encoding="utf-8")
     print(txt)
 
 
@@ -242,7 +242,7 @@ def main():
             pp = predict_all(clf, [degrade(im, px) for im in imgs]).argmax(1)
             robust.append({"run": clf.name, "px": str(px), "accuracy": accuracy_score(y, pp),
                            "macro_f1": f1_score(y, pp, average="macro")})
-        if isinstance(clf, TimmClassifier):
+        if hasattr(clf, "cam_target"):
             cam_frames.append(gradcam_section(clf, d, imgs, classes, out, np.random.RandomState(SEED)))
 
     S = pd.DataFrame(summary)

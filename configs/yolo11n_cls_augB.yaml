@@ -1,0 +1,27 @@
+# YOLO11n-cls + augmentasi degradasi (setara aug B timm). Semua pengaturan lain SAMA dengan yolo11n_cls.yaml
+# agar perbandingan adil (satu-satunya perbedaan: degradasi + gambar train dikecilkan ke sisi 256 sebelum augmentasi).
+model: runs/pretrained/yolo11n-cls.pt   # pretrained ImageNet-1k (unduhan resmi Ultralytics)
+data: data/split
+project: runs
+name: yolo11n_cls_augB
+aug_name: B (Ultralytics + degradasi)
+imgsz: 224
+epochs: 60
+patience: 12                 # early stopping pada val macro-F1
+batch: 64
+workers: 2                   # worker train (persistent)
+val_workers: 0               # validasi di proses utama: hemat RAM (bawaan = workers -> 4 proses -> WinError 1455); tidak mempengaruhi hasil
+seed: 42
+deterministic: false
+amp: true
+optimizer: auto
+cache: false
+plots: true
+degrade:                     # sama dengan configs/timm.yaml aug B
+  downscale_px: [48, 128]
+  downscale_p: 0.5
+  blur_p: 0.3
+  jpeg_quality: [40, 90]
+  jpeg_p: 0.5
+  noise_std: [0.01, 0.04]
+  noise_p: 0.3
