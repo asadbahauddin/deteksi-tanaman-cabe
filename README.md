@@ -41,6 +41,7 @@ Seed 42 tetap untuk semua tahap. Config tersimpan di `configs/`.
 | 5. Benchmark | `python scripts/08_benchmark_cpu.py [--threads 4]` | `reports/benchmark_cpu.md` |
 | Uji gambar luar | Isi `data/uji_internet/<Kelas>/` (lihat `PETUNJUK.txt`), lalu `python scripts/09_uji_eksternal.py` | `reports/uji_internet/<waktu>/ringkasan.md`; gambar yang ternyata berasal dari dataset ditandai otomatis |
 | Siapkan detektor daun (sekali) | `python scripts/11_siapkan_detektor_daun.py` (unduh encoder teks ~254 MB; jalankan saat koneksi bagus) | `runs/pretrained/yoloe-26n-seg-daun.pt` (YOLOE-26 zero-shot, prompt "leaf") |
+| **Deteksi dari screenshot** (disarankan) | `python scripts/12_deteksi_screenshot.py` → toolbar kecil selalu di atas; saat menemukan gambar daun klik **Ambil & Deteksi** atau tekan **F8** → drag kotak → hasil keluar; **Deteksi lagi** untuk target berikutnya; opsional pilih *Label sebenarnya* | `data/uji_internet/hasil_screenshot/<waktu>/` (NN_asli.png, NN_hasil.png, hasil.csv, ringkasan.md + akurasi bila diberi label) |
 | Uji tangkapan layar | `python scripts/10_uji_layar.py` → drag area gambar; **R** rekam, **S** screenshot, **A** ganti area, **Q** keluar | `data/uji_internet/rekaman_layar/<waktu>/` (video MP4 2 model berdampingan, CSV, ringkasan). Mode **deteksi** (kotak per daun) aktif otomatis bila detektor sudah disiapkan; tanpa detektor = mode **klasifikasi** (hanya kotak tengah). Jendela program otomatis tidak ikut tertangkap. |
 
 `--model` pada script 05 dan 06 menerima:

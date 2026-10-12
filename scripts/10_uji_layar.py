@@ -103,7 +103,8 @@ class Detector:
         return sorted(out, key=lambda b: (b[1] // 80, b[0]))  # urut baris lalu kolom -> nomor daun stabil
 
 
-def draw_panel(mode, names, classes, leaves, fps, rec, t_rec, aspek_warn):
+def draw_panel(mode, names, classes, leaves, fps, rec, t_rec, aspek_warn,
+               bantuan="R rekam  S screenshot  A ganti area  Q keluar", tip_area="pilih 1 daun (A)"):
     p = np.full((H, PANEL_W, 3), 28, np.uint8)
     y = 26
     cv2.putText(p, f"Mode: {mode.upper()}", (12, y), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
@@ -114,7 +115,7 @@ def draw_panel(mode, names, classes, leaves, fps, rec, t_rec, aspek_warn):
             cv2.putText(p, t, (12, y), cv2.FONT_HERSHEY_SIMPLEX, 0.42, (180, 180, 180), 1)
             y += 17
         if aspek_warn:
-            cv2.putText(p, "! Area terlalu lebar/tinggi - pilih 1 daun (A)", (12, y), cv2.FONT_HERSHEY_SIMPLEX,
+            cv2.putText(p, f"! Area terlalu lebar/tinggi - {tip_area}", (12, y), cv2.FONT_HERSHEY_SIMPLEX,
                         0.45, (0, 140, 255), 1)
             y += 17
         y += 6
@@ -152,8 +153,9 @@ def draw_panel(mode, names, classes, leaves, fps, rec, t_rec, aspek_warn):
             cv2.putText(p, f"... +{len(leaves) - 16} daun", (12, y + 24), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (160, 160, 160), 1)
         cv2.putText(p, "hijau = kedua model sepakat, oranye = berbeda", (12, H - 58), cv2.FONT_HERSHEY_SIMPLEX, 0.42,
                     (160, 160, 160), 1)
-    cv2.putText(p, "R rekam  S screenshot  A ganti area  Q keluar", (12, H - 36), cv2.FONT_HERSHEY_SIMPLEX, 0.45,
-                (220, 220, 220), 1)
+    cv2.putText(p, bantuan, (12, H - 36), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (220, 220, 220), 1)
+    if fps is None:  # mode screenshot: tanpa FPS/REC
+        return p
     status = f"{fps:4.1f} FPS"
     if rec:
         status += f"   REC {int(t_rec // 60):02d}:{int(t_rec % 60):02d}"
